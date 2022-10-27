@@ -1,24 +1,28 @@
 import 'package:expence_tracker/custom_list/helper_function&list.dart';
 import 'package:expence_tracker/models/expense_model.dart';
+import 'package:expence_tracker/models/lone_model.dart';
 import 'package:expence_tracker/providers/expence_provider.dart';
+import 'package:expence_tracker/providers/lone_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 
 
 
-class ExpenseAddPage extends StatefulWidget {
-  static const routeName = '/expenseaddpage';
+class LoneAddPage extends StatefulWidget {
+  static const routeName = '/loneaddpage';
 
-  const ExpenseAddPage({Key? key}) : super(key: key);
+  const LoneAddPage({Key? key}) : super(key: key);
 
   @override
-  State<ExpenseAddPage> createState() => _ExpenseAddPage();
+  State<LoneAddPage> createState() => _LoneAddPage();
 }
 
-class _ExpenseAddPage extends State<ExpenseAddPage> {
+class _LoneAddPage extends State<LoneAddPage> {
 
   final costContoller = TextEditingController();
+
+
 
   @override
   void dispose() {
@@ -30,6 +34,8 @@ class _ExpenseAddPage extends State<ExpenseAddPage> {
   String? dropdownValue ;
   DateTime? addDate;
   int? id;
+  int? amount;
+  DateTime? payDate;
 
 
   @override
@@ -50,8 +56,8 @@ class _ExpenseAddPage extends State<ExpenseAddPage> {
                       border:OutlineInputBorder(
                         borderRadius: BorderRadius.circular(6),
                         borderSide:const BorderSide(
-                            color: Colors.blue,
-                            width: 2,
+                          color: Colors.blue,
+                          width: 2,
                         ),
                       )
                   ),
@@ -76,10 +82,10 @@ class _ExpenseAddPage extends State<ExpenseAddPage> {
                 controller: costContoller,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
-                  hintText: "Cost",
+                  hintText: "Amount",
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(7),
-                    borderSide:const BorderSide(color: Colors.green,width: 2)
+                      borderRadius: BorderRadius.circular(7),
+                      borderSide:const BorderSide(color: Colors.green,width: 2)
                   ),
 
                 ),
@@ -93,6 +99,23 @@ class _ExpenseAddPage extends State<ExpenseAddPage> {
             ),
             const SizedBox(height: 10,),
             Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton.icon(
+                    onPressed: selectDate,
+                    icon: const Icon(Icons.calendar_month),
+                    label: const Text('Select Release Date'),
+                  ),
+                  Text(payDate == null
+                      ? 'No date chosen'
+                      : getFormattedDate(payDate!, 'dd/MM/yyyy'))
+                ],
+              ),
+            ),
+            const SizedBox(height: 10,),
+            Padding(
               padding: const EdgeInsets.all(2.0),
               child: ElevatedButton(
                   style:  ElevatedButton.styleFrom(
@@ -102,7 +125,7 @@ class _ExpenseAddPage extends State<ExpenseAddPage> {
                   ),
                   child: const Text("Submit", style: TextStyle(fontSize: 20),),
                   onPressed:(){
-                    addExpence();
+                    addLone();
                   }
               ),
             ),
@@ -112,30 +135,39 @@ class _ExpenseAddPage extends State<ExpenseAddPage> {
     );
   }
 
-  void addExpence() {
-    final provider=Provider.of<ExpenceProvider>(context,listen: false);
+  void addLone() {
+    final provider=Provider.of<LoneProvider>(context,listen: false);
     if(_formKey.currentState!.validate()){
       final addDate=DateTime.now();
       int cost =int.parse(costContoller.text);
 
-      final expenceModel = ExpenseModel(
-          catagory: dropdownValue!,
-          cost: cost,
-          //datetime:addDate.toString(),
-          datetime:getFormattedDate(addDate, "dd/MM/yyyy HH:mm:ss a"),
+      final loneModel = LoneModel(
+        catagory: dropdownValue!, amount: cost, takendate: getFormattedDate(DateTime.now(), "dd/MM/yyyy HH:mm:ss a"), paydate: getFormattedDate(addDate, "dd/MM/yyyy HH:mm:ss a"),
       );
 
-      provider.insertExpence(expenceModel)
+      provider.insertLone(loneModel)
           .then((value) {
-           provider.getAllExpence();
-            Navigator.pop(context);
+        provider.getAlllone();
+        Navigator.pop(context);
       })
           .catchError((error){
-            print("data not insert");
+        print("data not insert");
       });
 
     }
   }
 
-
+  void selectDate() async {
+    final selectedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+    if (selectedDate != null) {
+      setState(() {
+        payDate = selectedDate;
+      });
+    }
+  }
 }

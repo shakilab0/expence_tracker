@@ -30,7 +30,7 @@ class ExpenceProvider extends ChangeNotifier{
         totalexp=totalexp+element.cost;
  }
     total=totalexp;
-    return total;
+    return total ?? 0;
 
   }
 

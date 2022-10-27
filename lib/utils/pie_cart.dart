@@ -27,7 +27,9 @@ double call(String a,ExpenceProvider b){
   double persent;
   x=b.getindivisualcost(a);
   m=b.gettotalexpence();
-  persent=(x*100)/m*1.00;
+  if(m==0){ persent= 0.00;}
+  else{persent=(x*100)/m*1.00;}
+
   return persent;
 
 

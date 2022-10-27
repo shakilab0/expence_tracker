@@ -1,5 +1,6 @@
 
 import '../models/expense_model.dart';
+import '../models/lone_model.dart';
 import '../models/user_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart' as Path;
@@ -16,12 +17,20 @@ class DbHelper {
   $tblUserColemail text,
   $tblUserColPass text)''';
 
+  static const String createLone = ''' create table $tableLone(
+  $tblLoneId integer primary key autoincrement,
+  $tblLoneCatagory text,
+  $tblLoneAmount integer,
+  $tblLonePayDate text,
+  $tblLoneTakeDate text)''';
+
   static Future<Database> open()async{
     final rootPath=await getDatabasesPath();
     final dbPath=Path.join(rootPath,'expense_db');
     return openDatabase(dbPath,version: 1,onCreate: (db,version)async{
       await db.execute(createTableUser);
       await db.execute(createTableExp);
+      await db.execute(createLone);
     });
   }
 
@@ -49,8 +58,18 @@ static Future<UserModel>getUserByEmail(String email)async {
 
     );
   }
+  static Future <int> insertLone(LoneModel loneModel)async{
+    final db=await open();
+    return db.insert(tableLone, loneModel.toMap());
+  }
+  static Future<List<LoneModel>>getAllLone()async{
+    final db=await open();
+    final maplist=await db.query(tableLone);
+    return List.generate(maplist.length, (index) =>
+        LoneModel.fromMap(maplist[index]),
 
-
+    );
+  }
 
 //Multi Screen query Start now:
 

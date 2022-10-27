@@ -1,7 +1,9 @@
 
 import 'package:expence_tracker/pages/expense_add_page.dart';
+import 'package:expence_tracker/pages/lone_add_page.dart';
 import 'package:expence_tracker/pages/multi_screen_pages.dart';
 import 'package:expence_tracker/providers/expence_provider.dart';
+import 'package:expence_tracker/providers/lone_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +23,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void didChangeDependencies() {
     Provider.of<ExpenceProvider>(context,listen: false).getAllExpence();
+    Provider.of<LoneProvider>(context,listen: false);
     super.didChangeDependencies();
   }
 
@@ -30,17 +33,29 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.orange,
-        onPressed: (){
-          Navigator.pushNamed(context, ExpenseAddPage.routeName);
-        },
-        child:const Icon(Icons.add,size: 30,),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   backgroundColor: Colors.orange,
+      //   onPressed: (){
+      //     Navigator.pushNamed(context, ExpenseAddPage.routeName);
+      //   },
+      //   child:const Icon(Icons.add,size: 30,),
+      // ),
       backgroundColor:HexColor("#D0E0E8") ,
       appBar: AppBar(
         title: const Text("Expense Tracker"),
         actions: [
+          ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+
+                  )
+              ),
+              onPressed: (){
+                Navigator.pushNamed(context, MultiScreenPages.routeName);
+              },
+              child:const Text("Show Catagory")
+          ),
           ElevatedButton(
               style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
@@ -50,7 +65,7 @@ class _HomePageState extends State<HomePage> {
               onPressed: (){
                 Navigator.pushNamed(context, MultiScreenPages.routeName);
               },
-              child:const Text("Show Catagory")
+              child:const Text("Show Lone")
           )
         ],
         elevation: 0,
@@ -105,6 +120,37 @@ class _HomePageState extends State<HomePage> {
                       );
                     },
 
+                  ),
+                ),
+
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              )
+                          ),
+                          onPressed: (){
+                            Navigator.pushNamed(context, ExpenseAddPage.routeName);
+                          },
+                          child:const Text("Add Expense")
+                      ),
+                      SizedBox(width:MediaQuery.of(context).size.width/2.3),
+                      ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              )
+                          ),
+                          onPressed: (){
+                            Navigator.pushNamed(context, LoneAddPage.routeName);
+                          },
+                          child:const Text("Add Lone")
+                      ),
+                    ],
                   ),
                 ),
 
