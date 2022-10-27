@@ -10,13 +10,14 @@ class ExpenseModel{
   int? id;
   String catagory;
   int cost;
-  DateTime datetime;
+  String datetime;
 
   ExpenseModel({
     this.id,
     required this.catagory,
     required this.cost,
-    required this.datetime});
+    required this.datetime,
+  });
 
   Map<String,dynamic> toMap(){
     final map= <String,dynamic>{
@@ -36,4 +37,8 @@ class ExpenseModel{
     datetime: map[tblExpColDatetime]
   );
 
+  @override
+  String toString() {
+    return 'ExpenseModel{id: $id, catagory: $catagory, cost: $cost, datetime: $datetime}';
+  }
 }

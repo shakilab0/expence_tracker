@@ -7,12 +7,21 @@ import '../models/user_model.dart';
 class UserProvider extends ChangeNotifier{
 
   late UserModel  _userModel;
+
+  set userModel(UserModel value) {
+    _userModel = value;
+  }
+
   UserModel get userModel => _userModel;
 
+Future<int>insertUser(UserModel userModel)=>
+    DbHelper.insertUser(userModel);
 
-  Future<int>insertNewUser(UserModel userModel)=>
-      Db_Helper.insertUser(userModel);
+Future<UserModel>getUserByEmail(String email){
+  return DbHelper.getUserByEmail(email);
 
-  Future<UserModel?>getUserByEmail(String email)=>
-      Db_Helper.getUserByEmail(email);
+}
+
+
+
 }

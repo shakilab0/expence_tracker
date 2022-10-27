@@ -16,26 +16,27 @@ class UserModel{
     required this.password,
   });
 
-  Map<String,dynamic>toMap(){
-    final map=<String,dynamic>{
-      tblUserColemail:email,
-      tblUserColPass:password,
-    };
-    if(id!=null){
-      map[tblUserColId]=id;
-    }
-    return map;
+Map<String,dynamic>toMap(){
+  final map=<String,dynamic>{
+    tblUserColemail:email,
+    tblUserColPass:password,
+  };
+  if(id!=null){
+    map[tblUserColId]=id;
   }
+  return map;
+}
 
-  factory UserModel.fromMap(Map<String,dynamic>map)=>
-      UserModel(
+factory UserModel.fromMap(Map<String,dynamic>map)=>
+    UserModel(
         id: map[tblUserColId],
         email: map[tblUserColemail],
-        password: map[tblUserColPass],
-      );
+        password: map[tblUserColPass]
+    );
 
   @override
   String toString() {
     return 'UserModel{id: $id, email: $email, password: $password}';
   }
+
 }

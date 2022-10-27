@@ -1,5 +1,7 @@
 
+import 'package:expence_tracker/custom_list/helper_function&list.dart';
 import 'package:expence_tracker/pages/home_page.dart';
+import 'package:expence_tracker/pages/launcher_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
@@ -30,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
 
   final _formKey = GlobalKey<FormState>();
   String errMsg = "";
-  late bool isLogin;
+  bool isLogin=false;
 
 
   @override
@@ -91,6 +93,7 @@ class _LoginPageState extends State<LoginPage> {
                     Padding(
                       padding: const EdgeInsets.all(15.0),
                       child: TextFormField(
+                        obscureText: true,
                         controller: passController,
                         decoration: InputDecoration(
                             hintText: 'Password',
@@ -121,6 +124,7 @@ class _LoginPageState extends State<LoginPage> {
                             child: const Text(
                               "LogIn", style: TextStyle(fontSize: 20),),
                             onPressed: () {
+                              isLogin=true;
                               _loginState();
                             },
                           ),
@@ -137,12 +141,14 @@ class _LoginPageState extends State<LoginPage> {
                             child: const Text(
                               "Register", style: TextStyle(fontSize: 20),),
                             onPressed: () {
+                              isLogin=false;
                               _loginState();
                             },
                           ),
                         ),
                       ],
                     ),
+                    
                     const SizedBox(
                       height: 10,
                     ),
@@ -157,47 +163,52 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+
+
   void _loginState() async {
-    final provider = Provider.of<UserProvider>(context, listen: false);
-
-
+    final provider=Provider.of<UserProvider>(context,listen: false);
     if (_formKey.currentState!.validate()) {
       final email = emailController.text;
       final password = passController.text;
+      if(isLogin){
+        provider.getUserByEmail(email)
+            .then((user){
+              if(user.password==password){
+                setLoginStatus(true).then((value){
+                  Navigator.pushReplacementNamed(context, LauncherPage.routeName);
+                });
+              }else{
+                _setErrorMsg("wrong password");
+              }
 
-      final user = await provider.getUserByEmail(email);
-      print('${user?.email},${user?.id},$user');
-      if (isLogin==false) {
-        if (user == null) {
-          _setErrorMsg("User does not Exit");
-        } else {
-          if (password == user.password) {
-            await setLoginStatus(true);
-            await setUserId(user.id!);
-            if (mounted) {
-              Navigator.pushReplacementNamed(
-                context, HomePage.routeName);
-            }
-          } else {
-            _setErrorMsg("Wrong Password");
-          }
-        }
-      } else {
-        if (user != null) {
-          _setErrorMsg("User Already exits");
-        } else {
-          final user = UserModel(email: email, password: password);
-          final rowId = await provider.insertNewUser(user);
-          await setLoginStatus(true);
-          await setUserId(rowId);
-          _setErrorMsg("User Exist");
-          if (mounted) {
-            Navigator.pushReplacementNamed(
-              context, HomePage.routeName);
-          }
-        }
-        //if(mounted)Navigator.pushReplacementNamed(context, HomePage.routeName);
+        })
+            .catchError((error){
+          _setErrorMsg("Din not found your Email please try again or registration");
+
+        });
+
+      }else{
+        provider.getUserByEmail(email)
+            .then((user){
+            _setErrorMsg("allready have a account ");
+        })
+            .catchError((insetuser){
+              final userModel=UserModel(email: email, password: password);
+              provider.insertUser(userModel)
+                  .then((rowId){
+                    setLoginStatus(true).then((value) {
+                      userModel.id=rowId;
+                      //provider.userModel=userModel;
+                      Navigator.pushReplacementNamed(context, LauncherPage.routeName);
+                    });
+              })
+                  .catchError((onError){
+                    print("database error");
+              });
+        });
       }
+
+
     }
   }
 
@@ -206,4 +217,6 @@ class _LoginPageState extends State<LoginPage> {
       errMsg = s;
     });
   }
+
+
 }

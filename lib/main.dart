@@ -1,16 +1,24 @@
+
 import 'package:expence_tracker/pages/expense_add_page.dart';
 import 'package:expence_tracker/pages/home_page.dart';
+import 'package:expence_tracker/pages/launcher_page.dart';
 import 'package:expence_tracker/pages/login_page.dart';
-import 'package:expence_tracker/providers/provider_class.dart';
+import 'package:expence_tracker/pages/multi_screen_pages.dart';
+import 'package:expence_tracker/providers/expence_provider.dart';
+import 'package:expence_tracker/providers/multi_screen_provider.dart';
 import 'package:expence_tracker/providers/user_provider.dart';
+
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 
 void main() {
   runApp(MultiProvider(
     providers: [
-      ChangeNotifierProvider(create: (context)=>ProviderClass()),
+      ChangeNotifierProvider(create: (context)=>ExpenceProvider()),
       ChangeNotifierProvider(create: (context)=>UserProvider()),
+      ChangeNotifierProvider(create: (context)=>MultiScreenProvider()),
     ],
       child: const MyApp()),
   );
@@ -27,13 +35,16 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
+      //home: HomeScreen(),
 
 
-      initialRoute: LoginPage.routeName,
+      initialRoute: LauncherPage.routeName,
       routes: {
         LoginPage.routeName:(context)=>const LoginPage(),
         HomePage.routeName:(context)=>const HomePage(),
         ExpenseAddPage.routeName:(context)=>const ExpenseAddPage(),
+        LauncherPage.routeName:(context)=>const LauncherPage(),
+        MultiScreenPages.routeName:(context)=>const MultiScreenPages(),
       },
 
     );
