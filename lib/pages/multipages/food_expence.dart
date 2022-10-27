@@ -63,7 +63,7 @@ class _FoodExpenceState extends State<FoodExpence> {
                 color:HexColor("#D0E0E8"),
                 child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children:[Text('Total Food cost: ''$total',style: const TextStyle(fontSize: 20,color: Colors.green),)],
+                children:[Text('Total Food cost: ''$total',style: const TextStyle(fontSize: 20,color: Colors.green,fontWeight: FontWeight.bold),)],
               ),
             ),
           ),
