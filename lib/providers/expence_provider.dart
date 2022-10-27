@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 class ExpenceProvider extends ChangeNotifier{
 
   List<ExpenseModel>expenceList=[];
+  late int total;
 
 
   Future<int>insertExpence(ExpenseModel expenseModel)=>
@@ -13,6 +14,7 @@ class ExpenceProvider extends ChangeNotifier{
 
   void getAllExpence()async{
     expenceList=await DbHelper.getAllExpence();
+    expenceList.reversed;
     notifyListeners();
   }
   int gettotalexpence() {
@@ -27,7 +29,8 @@ class ExpenceProvider extends ChangeNotifier{
     for (var element in expenceList.where((element) => element.catagory==cat)) {
         totalexp=totalexp+element.cost;
  }
-    return totalexp;
+    total=totalexp;
+    return total;
 
   }
 

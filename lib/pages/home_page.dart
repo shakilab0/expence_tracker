@@ -69,7 +69,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       const SizedBox(height: 22,),
-                      Pie_chart(context),
+                      Pie_chart(context,provider),
                       Padding(
                         padding: const EdgeInsets.all(14.0),
                         child: Row(
@@ -90,7 +90,7 @@ class _HomePageState extends State<HomePage> {
                     itemCount:provider.expenceList.length,
                     itemBuilder: (context, index) {
                       final expence = provider.expenceList[index];
-                      return Padding(
+                        return Padding(
                         padding: const EdgeInsets.only(left: 10,right: 10,top: 7),
                         child: ListTile(
                           shape: RoundedRectangleBorder(

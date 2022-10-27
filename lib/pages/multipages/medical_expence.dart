@@ -31,7 +31,7 @@ class _MedicalExpenceState extends State<MedicalExpence> {
       body: Column(
         children: [
           Container(
-            height: MediaQuery.of(context).size.height*0.70,
+            height: MediaQuery.of(context).size.height*0.75,
             child: Consumer<MultiScreenProvider>(
                 builder:(context,provider,child)=>ListView.builder(
                   itemCount:provider.medicalExpenceList.length,
@@ -61,7 +61,7 @@ class _MedicalExpenceState extends State<MedicalExpence> {
               color:HexColor("#D0E0E8"),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children:[Text('Total Medical cost: ''$total',style: const TextStyle(fontSize: 20,color: Colors.green),)],
+                children:[Text('Total Medical cost: ''$total',style: const TextStyle(fontSize: 20,color: Colors.green,fontWeight: FontWeight.bold),)],
               ),
             ),
           ),
