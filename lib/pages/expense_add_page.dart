@@ -122,7 +122,7 @@ class _ExpenseAddPage extends State<ExpenseAddPage> {
           catagory: dropdownValue!,
           cost: cost,
           //datetime:addDate.toString(),
-          datetime:getFormattedDate(addDate, "dd/MM/yyyy HH:mm:ss a"),
+          datetime:getFormattedDate(addDate, "dd/MM/yyyy hh:mm:ss a"),
       );
 
       provider.insertExpence(expenceModel)

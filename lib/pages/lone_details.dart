@@ -1,4 +1,5 @@
 
+import 'package:expence_tracker/custom_list/helper_function&list.dart';
 import 'package:expence_tracker/pages/expense_add_page.dart';
 import 'package:expence_tracker/pages/lone_add_page.dart';
 import 'package:expence_tracker/pages/multi_screen_pages.dart';
@@ -76,6 +77,8 @@ class _LoneDetailsPage extends State<LoneDetailsPage> {
                 itemCount:provider.loneList.length,
                 itemBuilder: (context, index) {
                   final lone = provider.loneList[index];
+                  var date=lone.paydate?.split('.')[0];
+
                   return Padding(
                     padding: const EdgeInsets.only(left: 10,right: 10,top: 7),
                     child: ListTile(
@@ -83,7 +86,7 @@ class _LoneDetailsPage extends State<LoneDetailsPage> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       title: Text('${lone.id}. Lone Take Date: ${lone.takendate}',style:const TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 17),),
-                      subtitle: Text('Lone Pay Date: ${lone.paydate}'),
+                      subtitle: Text('Lone Pay Date: $date'),
                       trailing: Text("\$ ${lone.amount.toString()}",style:const TextStyle(color: Colors.white,fontSize: 20,fontWeight: FontWeight.bold),),
                       tileColor: Colors.green,
 

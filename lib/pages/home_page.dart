@@ -1,12 +1,16 @@
+import 'dart:convert';
 
+import 'package:expence_tracker/custom_list/helper_function&list.dart';
 import 'package:expence_tracker/pages/expense_add_page.dart';
 import 'package:expence_tracker/pages/lone_add_page.dart';
 import 'package:expence_tracker/pages/multi_screen_pages.dart';
 import 'package:expence_tracker/providers/expence_provider.dart';
 import 'package:expence_tracker/providers/lone_provider.dart';
+import 'package:expence_tracker/providers/multi_screen_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
+import '../utils/notifications_util.dart';
 import '../utils/pie_cart.dart';
 import 'lone_details.dart';
 
@@ -22,24 +26,21 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   @override
+  void initState(){
+    super.initState();
+  }
+  @override
   void didChangeDependencies() {
     Provider.of<ExpenceProvider>(context,listen: false).getAllExpence();
     Provider.of<LoneProvider>(context,listen: false).getAlllone();
+
     super.didChangeDependencies();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // floatingActionButton: FloatingActionButton(
-      //   backgroundColor: Colors.orange,
-      //   onPressed: (){
-      //     Navigator.pushNamed(context, ExpenseAddPage.routeName);
-      //   },
-      //   child:const Icon(Icons.add,size: 30,),
-      // ),
+
       backgroundColor:HexColor("#D0E0E8") ,
       appBar: AppBar(
         title: const Text("Expense Tracker"),
@@ -89,10 +90,10 @@ class _HomePageState extends State<HomePage> {
                           "Total Lone: \$ ${Provider.of<LoneProvider>(context,listen: false).gettotallone() }", style: const TextStyle(fontSize: 28, color: Colors.green),
                         ),
                       ),
-                      const SizedBox(height: 22,),
+                      const SizedBox(height: 10),
                       Pie_chart(context,provider),
                       Padding(
-                        padding: const EdgeInsets.all(14.0),
+                        padding: const EdgeInsets.only(left: 14.0,right: 14.0),
                         child: Row(
                           children: const [
                             Text('Expences',style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
@@ -137,39 +138,36 @@ class _HomePageState extends State<HomePage> {
                   child:Container(
                     height: 20,
                       color:HexColor("#D0E0E8") ,
-                       child: Column(
-                         mainAxisSize: MainAxisSize.min,
-                         children: [
-                           Row(
-                           mainAxisAlignment: MainAxisAlignment.center,
-                           children: [
-                           ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  )
-                              ),
-                              onPressed: (){
-                                Navigator.pushNamed(context, ExpenseAddPage.routeName);
-                              },
-                              child:const Text("Add Expense")
-                           ),
-                           SizedBox(width:MediaQuery.of(context).size.width/2.3),
-                           ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  )
-                              ),
-                              onPressed: (){
-                                Navigator.pushNamed(context, LoneAddPage.routeName);
-                              },
-                              child:const Text("Add Lone")
+                       child: Row(
+                         crossAxisAlignment: CrossAxisAlignment.center,
+                       mainAxisAlignment: MainAxisAlignment.center,
+                       children: [
+                       ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              )
+                          ),
+                          onPressed: (){
+                            Navigator.pushNamed(context, ExpenseAddPage.routeName);
+                          },
+                          child:const Text("Add Expense")
+                       ),
+
+                         SizedBox(width:MediaQuery.of(context).size.width/2.2),
+                       ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              )
+                          ),
+                          onPressed: (){
+                            Navigator.pushNamed(context, LoneAddPage.routeName);
+                          },
+                          child:const Text("Add Lone")
                       ),
                     ],
                   ),
-                         ],
-                       ),
     )
                 ),
 

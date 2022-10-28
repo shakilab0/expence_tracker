@@ -4,6 +4,9 @@ import 'package:expence_tracker/pages/multipages/medical_expence.dart';
 import 'package:expence_tracker/pages/multipages/travels_expence.dart';
 import 'package:expence_tracker/pages/multipages/education_expence.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/expence_provider.dart';
 
 
 class MultiScreenPages extends StatefulWidget {

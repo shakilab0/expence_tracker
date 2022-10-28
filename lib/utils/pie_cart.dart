@@ -22,29 +22,21 @@ final gradientList = <List<Color>>[
     const Color.fromRGBO(20, 155, 255, 1),
   ]
 ];
-double call(String a,ExpenceProvider b){
-  int x,m;
-  double persent;
-  x=b.getindivisualcost(a);
-  m=b.gettotalexpence();
-  if(m==0){ persent= 0.00;}
-  else{persent=(x*100)/m*1.00;}
+double call(String a,ExpenceProvider b) {
+  return b.getindivisualcost(a)*1.00;}
+datamap(ExpenceProvider provider)=>
+{
+  "Food Cost": call(catagory[0], provider),
+  "Travels Cost": call(catagory[1], provider),
+  "Medical Cost": call(catagory[2], provider),
+  "Education Cost": call(catagory[3], provider),
+  "GF Cost":call(catagory[4], provider),
+};
 
-  return persent;
-
-
-}
 
  Pie_chart(BuildContext context,ExpenceProvider provider) {
   return PieChart(
-    dataMap: {
-      "Food Cost": call(catagory[0], provider),
-      "Travels Cost": call(catagory[1], provider),
-      "Medical Cost": call(catagory[2], provider),
-      "Education Cost": call(catagory[3], provider),
-      "GF Cost":call(catagory[4], provider),
-    },
-
+    dataMap: datamap(provider),
     animationDuration: const Duration(milliseconds: 800),
     chartLegendSpacing: 20,
     chartRadius: MediaQuery.of(context).size.width / 2.1,
@@ -82,3 +74,4 @@ double call(String a,ExpenceProvider b){
     // emptyColorGradient: ---Empty Color gradient---
   );
 }
+

@@ -1,11 +1,12 @@
 import 'package:expence_tracker/custom_list/helper_function&list.dart';
-import 'package:expence_tracker/models/expense_model.dart';
 import 'package:expence_tracker/models/lone_model.dart';
-import 'package:expence_tracker/providers/expence_provider.dart';
 import 'package:expence_tracker/providers/lone_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
+import '../utils/notifications_util.dart';
 
 
 
@@ -22,6 +23,7 @@ class _LoneAddPage extends State<LoneAddPage> {
 
   final costContoller = TextEditingController();
 
+  NotificationService notificationService = NotificationService();
 
 
   @override
@@ -36,6 +38,7 @@ class _LoneAddPage extends State<LoneAddPage> {
   int? amount;
   DateTime? payDate;
   bool setEmpty = true;
+
 
 
   @override
@@ -98,9 +101,10 @@ class _LoneAddPage extends State<LoneAddPage> {
                   ),
                   child: const Text("Submit", style: TextStyle(fontSize: 20),),
                   onPressed:(){
-                    if(payDate==null){setEmpty=false;
+                    if(payDate==null){setEmpty=true;
                     }else{
-                   addLone();}
+                      setEmpty=false;
+                   addLone(setEmpty);}
 
                   }
               ),
@@ -111,23 +115,25 @@ class _LoneAddPage extends State<LoneAddPage> {
     );
   }
 
-  void addLone() {
+  void addLone(bool setEmpty) {
     final provider=Provider.of<LoneProvider>(context,listen: false);
     if(_formKey.currentState!.validate()) {
-      print(setEmpty);
-      if (setEmpty!=true) {
+      if (setEmpty==false) {
         final addDate = DateTime.now();
         int cost = int.parse(costContoller.text);
         final loneModel = LoneModel(
           amount: cost,
-          takendate: getFormattedDate(addDate, "dd/MM/yyyy HH:mm a"),
-          paydate:getFormattedDate(payDate!, "dd/MM/yyyy HH:mm a"),
+          takendate: getFormattedDate(addDate, "dd/MM/yyyy HH:mm:ss"),
+          paydate:payDate!.add(Duration(hours: addDate.hour, minutes:addDate.minute+1 )).toLocal().toString(),
         );
 
         provider.insertLone(loneModel)
             .then((value) {
           provider.getAlllone();
           Navigator.pop(context);
+          var lone=Provider.of<LoneProvider>(context,listen: false).count+1;
+          NotificationService().scheduleNotification(lone, 'Pay lone quickly', 'Time Up: ${loneModel.amount}',payDate!.add(Duration(hours: DateTime.now().hour, minutes:DateTime.now().minute+1,seconds: DateTime.now().second )).toLocal(), '${loneModel.takendate}');
+
         })
             .catchError((error) {});
       }

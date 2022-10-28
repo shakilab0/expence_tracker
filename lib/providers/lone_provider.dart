@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:expence_tracker/db/db_helper.dart';
 import 'package:expence_tracker/models/lone_model.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +8,7 @@ import 'package:flutter/material.dart';
 class LoneProvider extends ChangeNotifier{
 
   List<LoneModel>loneList=[];
-  late int total;
+  late int total,count;
 
 
   Future<int>insertLone(LoneModel loneModel)=>
@@ -14,6 +16,7 @@ class LoneProvider extends ChangeNotifier{
 
   void getAlllone()async{
     loneList=await DbHelper.getAllLone();
+    count=loneList.length;
     notifyListeners();
   }
   int gettotallone() {
@@ -21,6 +24,7 @@ class LoneProvider extends ChangeNotifier{
     for (var element in loneList) {total=total+(element.amount as int);}
     return total;
   }
+
 
 
 

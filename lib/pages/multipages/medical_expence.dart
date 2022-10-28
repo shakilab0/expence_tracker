@@ -15,29 +15,26 @@ class MedicalExpence extends StatefulWidget {
 
 class _MedicalExpenceState extends State<MedicalExpence> {
 
-  int total=0;
-  String cat='';
+  String cat='Medical Cost';
 
   @override
   void didChangeDependencies() {
-    Provider.of<MultiScreenProvider>(context,listen: false).getMedicalExpence("Medical Cost");
-    total=Provider.of<ExpenceProvider>(context,listen: true).getindivisualcost(cat);
+    Provider.of<MultiScreenProvider>(context,listen: false).getExpence("Medical Cost");
     super.didChangeDependencies();
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor:HexColor("#D0E0E8") ,
-      body: Column(
+      body:Consumer<MultiScreenProvider>(
+      builder:(context,provider,child)=> Column(
         children: [
           Container(
             height: MediaQuery.of(context).size.height*0.75,
-            child: Consumer<MultiScreenProvider>(
-                builder:(context,provider,child)=>ListView.builder(
-                  itemCount:provider.medicalExpenceList.length,
+            child: ListView.builder(
+                  itemCount:provider.ExpenceList.length,
                   itemBuilder: (context, index) {
-                    final expence = provider.medicalExpenceList[index];
-                    cat=provider.medicalExpenceList[index].catagory;
+                    final expence = provider.ExpenceList[index];
                     return Padding(
                       padding: const EdgeInsets.only(left: 10,right: 10,top: 7),
                       child: ListTile(
@@ -55,18 +52,18 @@ class _MedicalExpenceState extends State<MedicalExpence> {
 
                 )
             ),
-          ),
+
           Expanded(
             child: Container(
               color:HexColor("#D0E0E8"),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children:[Text('Total Medical cost: ''$total',style: const TextStyle(fontSize: 20,color: Colors.green,fontWeight: FontWeight.bold),)],
+                children:[Text('Total Medical cost: ''${provider.getindivisualcost(cat)}',style: const TextStyle(fontSize: 20,color: Colors.green,fontWeight: FontWeight.bold),)],
               ),
             ),
           ),
         ],
-      ),
+      ),)
     );
   }
 }

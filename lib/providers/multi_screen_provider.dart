@@ -2,47 +2,27 @@ import 'package:expence_tracker/db/db_helper.dart';
 import 'package:expence_tracker/models/expense_model.dart';
 import 'package:flutter/material.dart';
 
+
 class MultiScreenProvider extends ChangeNotifier{
 
 
-  List<ExpenseModel>foodExpenceList=[];
+  List<ExpenseModel>ExpenceList=[];
+  int total=0;
 
-  void getFoodExpence(String catagory)async{
-    foodExpenceList=await DbHelper.getFoodExpence(catagory);
+  void getExpence(String catagory)async{
+    ExpenceList=await DbHelper.getFoodExpence(catagory);
     notifyListeners();
+
+  }
+  int getindivisualcost(String cat){
+    int total=0;
+    for (var element in ExpenceList) {
+      total=total+element.cost;
+    }
+    return total ?? 0;
+
   }
 
-
-  List<ExpenseModel>travelExpenceList=[];
-
-  void getTravelsExpence(String catagory)async{
-    travelExpenceList=await DbHelper.getTravelsExpence(catagory);
-    notifyListeners();
-  }
-
-
-  List<ExpenseModel>educationExpenceList=[];
-
-  void getEducationExpence(String catagory)async{
-    educationExpenceList=await DbHelper.getEducationExpence(catagory);
-    notifyListeners();
-  }
-
-
-  List<ExpenseModel>medicalExpenceList=[];
-
-  void getMedicalExpence(String catagory)async{
-    medicalExpenceList=await DbHelper.getMedicalExpence(catagory);
-    notifyListeners();
-  }
-
-
-  List<ExpenseModel>gfCostExpenceList=[];
-
-  void getGfCostExpence(String catagory)async{
-    gfCostExpenceList=await DbHelper.getGfCostExpence(catagory);
-    notifyListeners();
-  }
 
 
 

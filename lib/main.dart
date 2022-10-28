@@ -10,20 +10,24 @@ import 'package:expence_tracker/providers/multi_screen_provider.dart';
 import 'package:expence_tracker/providers/user_provider.dart';
 import 'package:expence_tracker/pages/lone_add_page.dart';
 import 'package:expence_tracker/pages/lone_details.dart';
-
-
+import 'package:expence_tracker/utils/notifications_util.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
+NotificationService notificationService = NotificationService();
 
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  NotificationService notificationService = NotificationService();
+  await notificationService.init();
+  await notificationService.requestIOSPermissions();
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context)=>ExpenceProvider()),
       ChangeNotifierProvider(create: (context)=>UserProvider()),
       ChangeNotifierProvider(create: (context)=>MultiScreenProvider()),
       ChangeNotifierProvider(create: (context)=>LoneProvider()),
-
     ],
       child: const MyApp()),
   );
@@ -32,6 +36,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +57,7 @@ class MyApp extends StatelessWidget {
         LoneDetailsPage.routeName:(context)=>const LoneDetailsPage(),
         LauncherPage.routeName:(context)=>const LauncherPage(),
         MultiScreenPages.routeName:(context)=>const MultiScreenPages(),
+
       },
 
     );
