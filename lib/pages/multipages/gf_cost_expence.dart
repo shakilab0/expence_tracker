@@ -15,33 +15,26 @@ class GfCostExpence extends StatefulWidget {
 
 class _GfCostExpenceState extends State<GfCostExpence> {
 
-  int total=0;
-  String cat='';
+  String cat='Gf Cost';
 
   @override
   void didChangeDependencies() {
-    Provider.of<MultiScreenProvider>(context,listen: false).getGfCostExpence("Gf Cost");
-    total=Provider.of<ExpenceProvider>(context,listen: true).getindivisualcost(cat);
+    Provider.of<MultiScreenProvider>(context,listen: false).getExpence("Gf Cost");
     super.didChangeDependencies();
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:HexColor("#D0E0E8") ,
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Container(
-              height: MediaQuery.of(context).size.height*0.75,
-              child: Consumer<MultiScreenProvider>(
-                  builder:(context,provider,child)=>ListView.builder(
-                    itemCount:provider.gfCostExpenceList.length,
+        backgroundColor:HexColor("#D0E0E8") ,
+        body:Consumer<MultiScreenProvider>(
+          builder:(context,provider,child)=> Column(
+            children: [
+              Container(
+                  height: MediaQuery.of(context).size.height*0.75,
+                  child: ListView.builder(
+                    itemCount:provider.ExpenceList.length,
                     itemBuilder: (context, index) {
-
-                      final expence = provider.gfCostExpenceList[index];
-                      cat=provider.gfCostExpenceList[index].catagory;
-
+                      final expence = provider.ExpenceList[index];
                       return Padding(
                         padding: const EdgeInsets.only(left: 10,right: 10,top: 7),
                         child: ListTile(
@@ -59,19 +52,18 @@ class _GfCostExpenceState extends State<GfCostExpence> {
 
                   )
               ),
-            ),
-            Expanded(
-              child: Container(
-                color:HexColor("#D0E0E8"),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children:[Text('Total GF cost: ''$total',style: const TextStyle(fontSize: 20,color: Colors.green,fontWeight: FontWeight.bold),)],
+
+              Expanded(
+                child: Container(
+                  color:HexColor("#D0E0E8"),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children:[Text('Total GF cost: ''${provider.getindivisualcost(cat)}',style: const TextStyle(fontSize: 20,color: Colors.green,fontWeight: FontWeight.bold),)],
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-      ),
+            ],
+          ),)
     );
   }
 }

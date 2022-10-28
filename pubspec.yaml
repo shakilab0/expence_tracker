@@ -43,6 +43,11 @@ dependencies:
   sqflite:
   intl:
   shared_preferences:
+  flutter_local_notifications: ^9.1.2
+  timezone:
+  flutter_native_timezone:
+  get: ^4.6.5
+
 
 dev_dependencies:
   flutter_test:
@@ -54,7 +59,10 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
-
+flutter_icons:
+  android: "app"
+  ios: true
+  image_path: "@minimap/app.png"
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
