@@ -8,7 +8,8 @@ import 'package:expence_tracker/providers/expence_provider.dart';
 import 'package:expence_tracker/providers/lone_provider.dart';
 import 'package:expence_tracker/providers/multi_screen_provider.dart';
 import 'package:expence_tracker/providers/user_provider.dart';
-import 'pages/lone_add_page.dart';
+import 'package:expence_tracker/pages/lone_add_page.dart';
+import 'package:expence_tracker/pages/lone_details.dart';
 
 
 import 'package:flutter/material.dart';
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
         HomePage.routeName:(context)=>const HomePage(),
         ExpenseAddPage.routeName:(context)=>const ExpenseAddPage(),
         LoneAddPage.routeName:(context)=>const LoneAddPage(),
+        LoneDetailsPage.routeName:(context)=>const LoneDetailsPage(),
         LauncherPage.routeName:(context)=>const LauncherPage(),
         MultiScreenPages.routeName:(context)=>const MultiScreenPages(),
       },

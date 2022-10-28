@@ -19,7 +19,6 @@ class DbHelper {
 
   static const String createLone = ''' create table $tableLone(
   $tblLoneId integer primary key autoincrement,
-  $tblLoneCatagory text,
   $tblLoneAmount integer,
   $tblLonePayDate text,
   $tblLoneTakeDate text)''';

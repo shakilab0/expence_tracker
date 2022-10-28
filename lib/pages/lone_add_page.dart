@@ -31,11 +31,11 @@ class _LoneAddPage extends State<LoneAddPage> {
     super.dispose();
   }
   final _formKey=GlobalKey<FormState>();
-  String? dropdownValue ;
   DateTime? addDate;
   int? id;
   int? amount;
   DateTime? payDate;
+  bool setEmpty = true;
 
 
   @override
@@ -48,34 +48,6 @@ class _LoneAddPage extends State<LoneAddPage> {
         child: Column(
           children: [
             const SizedBox(height: 10,),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: DropdownButtonFormField<String>(
-                  decoration:InputDecoration(
-                      label:const Text("Select Catagory"),
-                      border:OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(6),
-                        borderSide:const BorderSide(
-                          color: Colors.blue,
-                          width: 2,
-                        ),
-                      )
-                  ),
-                  items: catagory.map((e) => DropdownMenuItem(value:e,child:Text(e!))).toList(),
-                  value: dropdownValue,
-                  validator: (value){
-                    if(value==null || value.isEmpty){
-                      return 'Please select catagory';
-                    }
-                    return null;
-                  },
-                  onChanged: (value){
-                    setState(() {
-                      dropdownValue=value;
-                    });
-                  }
-              ),
-            ),
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: TextFormField(
@@ -106,11 +78,12 @@ class _LoneAddPage extends State<LoneAddPage> {
                   TextButton.icon(
                     onPressed: selectDate,
                     icon: const Icon(Icons.calendar_month),
-                    label: const Text('Select Release Date'),
+                    label: const Text('Select Lone Pay Date'),
                   ),
-                  Text(payDate == null
+                  Text(payDate==null
                       ? 'No date chosen'
-                      : getFormattedDate(payDate!, 'dd/MM/yyyy'))
+                      : getFormattedDate(payDate!, 'dd/MM/yyyy')),
+
                 ],
               ),
             ),
@@ -125,7 +98,10 @@ class _LoneAddPage extends State<LoneAddPage> {
                   ),
                   child: const Text("Submit", style: TextStyle(fontSize: 20),),
                   onPressed:(){
-                    addLone();
+                    if(payDate==null){setEmpty=false;
+                    }else{
+                   addLone();}
+
                   }
               ),
             ),
@@ -137,24 +113,25 @@ class _LoneAddPage extends State<LoneAddPage> {
 
   void addLone() {
     final provider=Provider.of<LoneProvider>(context,listen: false);
-    if(_formKey.currentState!.validate()){
-      final addDate=DateTime.now();
-      int cost =int.parse(costContoller.text);
+    if(_formKey.currentState!.validate()) {
+      print(setEmpty);
+      if (setEmpty!=true) {
+        final addDate = DateTime.now();
+        int cost = int.parse(costContoller.text);
+        final loneModel = LoneModel(
+          amount: cost,
+          takendate: getFormattedDate(addDate, "dd/MM/yyyy HH:mm a"),
+          paydate:getFormattedDate(payDate!, "dd/MM/yyyy HH:mm a"),
+        );
 
-      final loneModel = LoneModel(
-        catagory: dropdownValue!, amount: cost, takendate: getFormattedDate(DateTime.now(), "dd/MM/yyyy HH:mm:ss a"), paydate: getFormattedDate(addDate, "dd/MM/yyyy HH:mm:ss a"),
-      );
-
-      provider.insertLone(loneModel)
-          .then((value) {
-        provider.getAlllone();
-        Navigator.pop(context);
-      })
-          .catchError((error){
-        print("data not insert");
-      });
-
-    }
+        provider.insertLone(loneModel)
+            .then((value) {
+          provider.getAlllone();
+          Navigator.pop(context);
+        })
+            .catchError((error) {});
+      }
+      }
   }
 
   void selectDate() async {
@@ -162,12 +139,13 @@ class _LoneAddPage extends State<LoneAddPage> {
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
+      lastDate: DateTime(DateTime.now().year+50),
     );
     if (selectedDate != null) {
       setState(() {
         payDate = selectedDate;
-      });
+      }
+      );
     }
   }
 }
