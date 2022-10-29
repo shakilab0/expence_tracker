@@ -1,11 +1,18 @@
+import 'dart:convert';
 
+import 'package:expence_tracker/custom_list/helper_function&list.dart';
 import 'package:expence_tracker/pages/expense_add_page.dart';
+import 'package:expence_tracker/pages/lone_add_page.dart';
 import 'package:expence_tracker/pages/multi_screen_pages.dart';
 import 'package:expence_tracker/providers/expence_provider.dart';
+import 'package:expence_tracker/providers/lone_provider.dart';
+import 'package:expence_tracker/providers/multi_screen_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
+import '../utils/notifications_util.dart';
 import '../utils/pie_cart.dart';
+import 'lone_details.dart';
 
 class HomePage extends StatefulWidget {
   static const String routeName = "/homepage";
@@ -19,24 +26,21 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   @override
+  void initState(){
+    super.initState();
+  }
+  @override
   void didChangeDependencies() {
     Provider.of<ExpenceProvider>(context,listen: false).getAllExpence();
+    Provider.of<LoneProvider>(context,listen: false).getAlllone();
+
     super.didChangeDependencies();
   }
-
-
-   int? sum;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.orange,
-        onPressed: (){
-          Navigator.pushNamed(context, ExpenseAddPage.routeName);
-        },
-        child:const Icon(Icons.add,size: 30,),
-      ),
+
       backgroundColor:HexColor("#D0E0E8") ,
       appBar: AppBar(
         title: const Text("Expense Tracker"),
@@ -45,12 +49,24 @@ class _HomePageState extends State<HomePage> {
               style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
+
                   )
               ),
               onPressed: (){
                 Navigator.pushNamed(context, MultiScreenPages.routeName);
               },
               child:const Text("Show Catagory")
+          ),
+          ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  )
+              ),
+              onPressed: (){
+                Navigator.pushNamed(context, LoneDetailsPage.routeName);
+              },
+              child:const Text("Show Lone")
           )
         ],
         elevation: 0,
@@ -68,10 +84,16 @@ class _HomePageState extends State<HomePage> {
                           "Total Expences: \$ ${provider.gettotalexpence()}", style: const TextStyle(fontSize: 28, color: Colors.green),
                         ),
                       ),
-                      const SizedBox(height: 22,),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Text(
+                          "Total Lone: \$ ${Provider.of<LoneProvider>(context,listen: false).gettotallone() }", style: const TextStyle(fontSize: 28, color: Colors.green),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
                       Pie_chart(context,provider),
                       Padding(
-                        padding: const EdgeInsets.all(14.0),
+                        padding: const EdgeInsets.only(left: 14.0,right: 14.0),
                         child: Row(
                           children: const [
                             Text('Expences',style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
@@ -84,28 +106,69 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 Expanded(
-                  child:ListView.builder(
-                    // //physics: ScrollableScrollPhysics(),
-                    // shrinkWrap: false,
-                    itemCount:provider.expenceList.length,
-                    itemBuilder: (context, index) {
-                      final expence = provider.expenceList[index];
-                        return Padding(
-                        padding: const EdgeInsets.only(left: 10,right: 10,top: 7),
-                        child: ListTile(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                  flex: 7,
+                  child:Container(
+                    height: MediaQuery.of(context).size.height*1.5,
+                    child: ListView.builder(
+                      // //physics: ScrollableScrollPhysics(),
+                      // shrinkWrap: false,
+                      itemCount:provider.expenceList.length,
+                      itemBuilder: (context, index) {
+                        final expence = provider.expenceList[index];
+                          return Padding(
+                          padding: const EdgeInsets.only(left: 10,right: 10,top: 7),
+                          child: ListTile(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            title: Text(expence.catagory,style:const TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 20),),
+                            subtitle: Text(expence.datetime),
+                            trailing: Text("\$ ${expence.cost.toString()}",style:const TextStyle(color: Colors.white,fontSize: 20,fontWeight: FontWeight.bold),),
+                            tileColor: Colors.green,
+
                           ),
-                          title: Text(expence.catagory,style:const TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 20),),
-                          subtitle: Text(expence.datetime),
-                          trailing: Text("\$ ${expence.cost.toString()}",style:const TextStyle(color: Colors.white,fontSize: 20,fontWeight: FontWeight.bold),),
-                          tileColor: Colors.green,
+                        );
+                      },
 
-                        ),
-                      );
-                    },
-
+                    ),
                   ),
+                ),
+
+                Expanded(
+                  child:Container(
+                    height: 20,
+                      color:HexColor("#D0E0E8") ,
+                       child: Row(
+                         crossAxisAlignment: CrossAxisAlignment.center,
+                       mainAxisAlignment: MainAxisAlignment.center,
+                       children: [
+                       ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              )
+                          ),
+                          onPressed: (){
+                            Navigator.pushNamed(context, ExpenseAddPage.routeName);
+                          },
+                          child:const Text("Add Expense")
+                       ),
+
+                         SizedBox(width:MediaQuery.of(context).size.width/2.2),
+                       ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              )
+                          ),
+                          onPressed: (){
+                            Navigator.pushNamed(context, LoneAddPage.routeName);
+                          },
+                          child:const Text("Add Lone")
+                      ),
+                    ],
+                  ),
+    )
                 ),
 
               ],

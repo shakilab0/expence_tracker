@@ -25,12 +25,11 @@ class ExpenceProvider extends ChangeNotifier{
 
   int getindivisualcost(String cat){
     getAllExpence();
-    int totalexp=0;
+    int total=0;
     for (var element in expenceList.where((element) => element.catagory==cat)) {
-        totalexp=totalexp+element.cost;
+        total=total+element.cost;
  }
-    total=totalexp;
-    return total;
+    return total ?? 0;
 
   }
 

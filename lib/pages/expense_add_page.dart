@@ -1,6 +1,5 @@
 import 'package:expence_tracker/custom_list/helper_function&list.dart';
 import 'package:expence_tracker/models/expense_model.dart';
-import 'package:expence_tracker/pages/home_page.dart';
 import 'package:expence_tracker/providers/expence_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -37,7 +36,7 @@ class _ExpenseAddPage extends State<ExpenseAddPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor:HexColor("#D0E0E8") ,
-      appBar: AppBar(),
+      appBar: AppBar(title: Text('Lone Add'),),
       body: Form(
         key: _formKey,
         child: Column(
@@ -123,7 +122,7 @@ class _ExpenseAddPage extends State<ExpenseAddPage> {
           catagory: dropdownValue!,
           cost: cost,
           //datetime:addDate.toString(),
-          datetime:getFormattedDate(addDate, "dd/MM/yyyy HH:mm:ss a"),
+          datetime:getFormattedDate(addDate, "dd/MM/yyyy hh:mm:ss a"),
       );
 
       provider.insertExpence(expenceModel)
