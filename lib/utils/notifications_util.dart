@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:get/get.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
-import '../pages/destinatio_page.dart';
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 
@@ -121,7 +119,6 @@ class NotificationService {
   }
   Future<void> onSelectNotification(String? payload) async {
     await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
-    // await Get.to(()=> DetailsPage(payload: payload));
   }
 
 

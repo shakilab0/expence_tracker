@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 
+import '../../custom_list/helper_function&list.dart';
 import '../../providers/expence_provider.dart';
-
 
 class TravelsExpence extends StatefulWidget {
   const TravelsExpence({Key? key}) : super(key: key);
@@ -14,56 +14,54 @@ class TravelsExpence extends StatefulWidget {
 }
 
 class _TravelsExpenceState extends State<TravelsExpence> {
-
-  String cat="Travels Cost";
+  int total = 0;
+  String cat = '';
 
   @override
   void didChangeDependencies() {
-    Provider.of<MultiScreenProvider>(context,listen: false).getExpence(cat);
+    Provider.of<MultiScreenProvider>(context, listen: false).getTravelsExpence("Travels Cost");
+    total = Provider.of<ExpenceProvider>(context, listen: true).getindivisualcost(cat);
     super.didChangeDependencies();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor:HexColor("#D0E0E8") ,
-        body:Consumer<MultiScreenProvider>(
-          builder:(context,provider,child)=> Column(
-            children: [
-              Container(
-                  height: MediaQuery.of(context).size.height*0.75,
-                  child: ListView.builder(
-                    itemCount:provider.ExpenceList.length,
-                    itemBuilder: (context, index) {
-                      final expence = provider.ExpenceList[index];
-                      return Padding(
-                        padding: const EdgeInsets.only(left: 10,right: 10,top: 7),
-                        child: ListTile(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          title: Text(expence.catagory,style:const TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 20),),
-                          subtitle: Text(expence.datetime),
-                          trailing: Text("\$ ${expence.cost.toString()}",style:const TextStyle(color: Colors.white,fontSize: 20,fontWeight: FontWeight.bold),),
-                          tileColor: Colors.green,
-
-                        ),
-                      );
-                    },
-
-                  )
-              ),
-
-              Expanded(
-                child: Container(
-                  color:HexColor("#D0E0E8"),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children:[Text('Total Medical cost: ''${provider.getindivisualcost(cat)}',style: const TextStyle(fontSize: 20,color: Colors.green,fontWeight: FontWeight.bold),)],
+      backgroundColor: HexColor("#D0E0E8"),
+      body: Column(
+        children: [
+          Container(
+            height: MediaQuery.of(context).size.height * 0.75,
+            child: Consumer<MultiScreenProvider>(
+                builder: (context, provider, child) => ListView.builder(
+                      itemCount: provider.travelExpenceList.length,
+                      itemBuilder: (context, index) {
+                        final expence = provider.travelExpenceList[index];
+                        cat = provider.travelExpenceList[index].catagory;
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                              left: 10, right: 10, top: 7),
+                          child: ShowListTile(expence),
+                        );
+                      },
+                    )),
+          ),
+          Expanded(
+            child: Container(
+              color: HexColor("#D0E0E8"),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Total Travels cost: \$' '$total',
+                    style: const TextStyle(fontSize: 20, color: Colors.green, fontWeight: FontWeight.bold),
                   ),
-                ),
+                ],
               ),
-            ],
-          ),)
+            ),
+          )
+        ],
+      ),
     );
   }
 }

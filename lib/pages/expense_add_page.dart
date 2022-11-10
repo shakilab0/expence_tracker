@@ -36,7 +36,9 @@ class _ExpenseAddPage extends State<ExpenseAddPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor:HexColor("#D0E0E8") ,
-      appBar: AppBar(title: Text('Lone Add'),),
+      appBar: AppBar(
+        title: Text("Expence add"),
+      ),
       body: Form(
         key: _formKey,
         child: Column(
@@ -55,7 +57,7 @@ class _ExpenseAddPage extends State<ExpenseAddPage> {
                         ),
                       )
                   ),
-                  items: catagory.map((e) => DropdownMenuItem(value:e,child:Text(e!))).toList(),
+                  items: catagory.map((e) => DropdownMenuItem(value:e,child:Text(e))).toList(),
                   value: dropdownValue,
                   validator: (value){
                     if(value==null || value.isEmpty){
@@ -121,8 +123,7 @@ class _ExpenseAddPage extends State<ExpenseAddPage> {
       final expenceModel = ExpenseModel(
           catagory: dropdownValue!,
           cost: cost,
-          //datetime:addDate.toString(),
-          datetime:getFormattedDate(addDate, "dd/MM/yyyy hh:mm:ss a"),
+          datetime:getFormattedDate(addDate, "dd/MM/yyyy HH:mm a"),
       );
 
       provider.insertExpence(expenceModel)

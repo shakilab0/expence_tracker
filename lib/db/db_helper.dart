@@ -1,6 +1,7 @@
 
+import 'package:expence_tracker/models/loan_model.dart';
+
 import '../models/expense_model.dart';
-import '../models/lone_model.dart';
 import '../models/user_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart' as Path;
@@ -12,16 +13,17 @@ class DbHelper {
   $tblExpColCost integer,
   $tblExpColDatetime text)''';
 
+  static const String createTableLoan = ''' create table $tableLoan(
+  $tblLoanColId integer primary key autoincrement,
+  $tblLoanColLendersName text,
+  $tblLoanColLoanAmount integer,
+  $tblLoanColLoanDate text,
+  $tblLoanColLastDate text)''';
+
   static const String createTableUser=''' create table $tableUser(
   $tblUserColId integer primary key autoincrement,
   $tblUserColemail text,
   $tblUserColPass text)''';
-
-  static const String createLone = ''' create table $tableLone(
-  $tblLoneId integer primary key autoincrement,
-  $tblLoneAmount integer,
-  $tblLonePayDate text,
-  $tblLoneTakeDate text)''';
 
   static Future<Database> open()async{
     final rootPath=await getDatabasesPath();
@@ -29,7 +31,7 @@ class DbHelper {
     return openDatabase(dbPath,version: 1,onCreate: (db,version)async{
       await db.execute(createTableUser);
       await db.execute(createTableExp);
-      await db.execute(createLone);
+      await db.execute(createTableLoan);
     });
   }
 
@@ -54,21 +56,23 @@ static Future<UserModel>getUserByEmail(String email)async {
     final maplist=await db.query(tableExp);
     return List.generate(maplist.length, (index) =>
         ExpenseModel.fromMap(maplist[index]),
-
     );
   }
-  static Future <int> insertLone(LoneModel loneModel)async{
+
+  static Future<int>insertLoan(LoanModel loanModel)async{
     final db=await open();
-    return db.insert(tableLone, loneModel.toMap());
+    return db.insert(tableLoan, loanModel.toMap());
   }
-  static Future<List<LoneModel>>getAllLone()async{
+
+  static Future<List<LoanModel>>getAllLoan()async{
     final db=await open();
-    final maplist=await db.query(tableLone);
+    final maplist = await db.query(tableLoan);
     return List.generate(maplist.length, (index) =>
-        LoneModel.fromMap(maplist[index]),
-
+        LoanModel.formMap(maplist[index]),
     );
   }
+
+
 
 //Multi Screen query Start now:
 
