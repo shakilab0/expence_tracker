@@ -13,6 +13,9 @@ String getFormattedDate(DateTime dateTime, String pattern) {
   return DateFormat(pattern).format(dateTime);
 }
 
+
+//shakil new update
+
 void showMsg(BuildContext context, String msg) =>
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
 
